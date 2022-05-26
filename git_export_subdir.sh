@@ -33,7 +33,6 @@ if [ "$#" -ne "3" ] && [ "$#" -ne "1" ]; then
     exit 1
 fi
 
-
 if [ -d "${repo:?}" ]; then
     echo "Found repository: ${repo:?}"
 else
@@ -44,7 +43,7 @@ fi
 repo_fullpath="$(cd "${repo:?}" && pwd)"
 if [ -z ${repo_fullpath} ]; then
     echo "Error: Could not create full path to repository ${repo:?}"
-    exit 100
+    exit 3
 fi
 
 subdir_given="${subdir:?}"
@@ -53,7 +52,7 @@ if [ -d "${repo_fullpath:?}/${subdir:?}" ]; then
     echo "Found subdirectory: ${repo:?} -> ${subdir:?}"
 else
     echo "Error: Subdirectory ${subdir:?} does not exist"
-    exit 3
+    exit 4
 fi
 
 new_branch="${subdir:?}-$(date +%Y%m%d-%H%M%S)"
@@ -71,7 +70,7 @@ if [ -d "${new_repo:?}" ]; then
         # directory is not empty
         echo "The directory ${new_repo:?} already exists and can not be used:"
         echo "Empty that directory or use another one"
-        exit 4
+        exit 5
     fi
 else
     # directory does not yet exist
@@ -81,14 +80,14 @@ else
         echo "Created directory ${new_repo:?}"
     else
         echo "Directory ${new_repo:?} could not created:"
-        exit 5
+        exit 6
     fi
 fi
 
 new_repo_fullpath="$(cd "${new_repo:?}" && pwd)"
 if [ -z ${new_repo_fullpath:?} ]; then
     echo "Error: Could not create full path to new repository ${new_repo_fullpath:?}"
-    exit 100
+    exit 7
 fi
 
 
@@ -116,7 +115,7 @@ if [ $? -eq "0" ]; then
 else
     echo "Something went wrong at the creation of a new branch for the subdir"
     echo "Inspect ${repo_fullpath:?} to find more information"
-    exit 6
+    exit 8
 fi
 
 cd "${new_repo_fullpath:?}"
@@ -124,7 +123,7 @@ if [ "$?" -eq "0" ]; then
     echo "Changed to new repository ${new_repo_fullpath:?}"
 else
     echo "Could not change to directory: ${new_repo_fullpath:?}"
-    exit 8
+    exit 9
 fi
 
 git init
@@ -132,7 +131,7 @@ if [ "$?" -eq "0" ]; then
     echo "Initialized new respository ${new_repo_fullpath:?}"
 else
     echo "Could not initialize new respository ${new_repo_fullpath:?}"
-    exit 9
+    exit 10
 fi
 
 git pull "${repo_fullpath:?}" "${new_branch:?}"
@@ -146,7 +145,7 @@ else
     echo "Could not pull branch from repository"
     echo "Repository: ${repo_fullpath:?}"
     echo "Branch:     ${new_branch:?}"
-    exit 10
+    exit 11
 fi
 
 exit 0
