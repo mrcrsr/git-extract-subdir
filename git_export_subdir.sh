@@ -74,8 +74,6 @@ fi
 
 new_branch="${subdir:?}-$(date +%Y%m%d-%H%M%S)"
 cd "${repo:?}"
-repo_fullpath=$(pwd)
-
 
 echo "Splitting ${subdir:?} in it's own branch..."
 git subtree split -P ${subdir:?} -b ${new_branch:?}
