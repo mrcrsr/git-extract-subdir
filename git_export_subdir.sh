@@ -55,6 +55,7 @@ else
     exit 3
 fi
 
+new_branch="${subdir:?}-$(date +%Y%m%d-%H%M%S)"
 
 if [ -d "${new_repo:?}" ]; then
     # directory already exists
@@ -85,8 +86,6 @@ if [ -z ${new_repo_fullpath:?} ]; then
     exit 100
 fi
 
-
-new_branch="${subdir:?}-$(date +%Y%m%d-%H%M%S)"
 
 # Give some output
 echo "Number of given input parameters:       $#"
