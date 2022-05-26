@@ -5,12 +5,6 @@ subdir="$2"
 new_repo="$3"
 callerdir="$(pwd)"
 
-echo "Number of given input parameters:       $#"
-echo "Path to repo                            $1"
-echo "Repo's subdir relative to repo:         $2"
-echo "Path to new repo consisting the subdir: $3"
-echo "Working directory:                      $callerdir"
-
 if [ "$#" -eq "0" ]; then
     echo "git_export_subdir <path-to-repo> <RELATIVE-path-to-subdir> <path-to-new-repo>"
     echo "the path to the subdir must be give relative to the original repository"
@@ -79,6 +73,17 @@ fi
 #read  -n 1 -p "Press any key to continue..." mainmenuinput
 
 new_branch="${subdir:?}-$(date +%Y%m%d-%H%M%S)"
+
+# Give some output
+echo "Number of given input parameters:       $#"
+echo "Relative path to repo:                  $repo"
+echo "Absolute path to repo:                  $repo_fullpath"
+echo "Repo's subdir relative to repo:         $subdir"
+echo "New branch name in repo:                $new_branch"
+echo "Relative path to new repo:              $new_repo"
+echo "Absolute path to new repo:              $new_repo_fullpath"
+echo "Starting directory:                     $callerdir"
+
 cd "${repo:?}"
 
 echo "Splitting ${subdir:?} in it's own branch..."
