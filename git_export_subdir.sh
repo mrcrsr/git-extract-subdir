@@ -32,6 +32,12 @@ else
     exit 2
 fi
 
+repo_fullpath="$(cd "${repo:?}" && pwd)"
+if [ "${repo_fullpath}" -eq "" ]; then
+    echo "Error: Could not create full path to repository ${repo:?}"
+    exit 100
+fi
+
 
 if [ -d "${subdir:?}" ]; then
     echo "Found subdirectory: ${repo:?} -> ${subdir:?}"
