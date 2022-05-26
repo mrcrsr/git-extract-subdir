@@ -6,10 +6,20 @@ repo="$1"
 subdir="$2"
 new_repo="$3"
 
+if [ "$?" -eq "1" ]; then
+    subdir="$1"
+    repo=""
+    new_repo="" # echo subdir...
+fi
+
 if [ "$#" -eq "0" ]; then
     echo "git_export_subdir <path-to-repo> <RELATIVE-path-to-subdir> <path-to-new-repo>"
-    echo "the path to the subdir must be give relative to the original repository"
-    echo "the path to the subdir must NOT contain leading or trailing / or ."
+    echo "    the path to the subdir must be give relative to the original repository"
+    echo "    the path to the subdir must NOT contain leading or trailing / or ."
+    echo " "
+    echo "git_export_subdir <RELATIVE-path-to-subdir>"
+    echo "    call from a git's root directory"
+    echo "    the new repo will be created in the parent directory"
     exit 0
 fi
 
