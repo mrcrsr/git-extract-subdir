@@ -70,6 +70,12 @@ else
     fi
 fi
 
+new_repo_fullpath="$(cd "${new_repo_fullpath:?}" && pwd)"
+if [ "${new_repo_fullpath}" -eq "" ]; then
+    echo "Error: Could not create full path to new repository ${new_repo_fullpath:?}"
+    exit 100
+fi
+
 #read  -n 1 -p "Press any key to continue..." mainmenuinput
 
 new_branch="${subdir:?}-$(date +%Y%m%d-%H%M%S)"
