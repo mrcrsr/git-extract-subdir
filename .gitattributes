@@ -1,29 +1,6 @@
-# The EOL settings in this file do NOT modify the EOLs of the working tree.
-# But change the EOLs in the staging area and the index.
-#
-# To normalize EOLs of files, that where commited prior to this file run
-#     git add --renormalize .
-#     git status
-#     git commit -m "Normalized EOLs of all tracked files accordingly to .gitattributes"
-# to update all tracked files in the repo.
-#
-# To verify that the files in the repo are using the correct EOLs run
-#     git ls-files --eol
-# i:      Line endings in Git's index               Should be lf
-# w:      Line endings in the working tree          Should be lf or crlf
-# attr:   Attribute applied to the file
-#
-# PATTERN   text       -> Converts EOL to LF inside repo and to system's native EOL on checkout
-# PATTERN   text=lf    -> Converts EOL to LF inside repo and stays LF on checkout
-# PATTERN   text=crlf  -> Converts EOL to LF inside repo and to CRLF on checkout
-# PATTERN   binary     -> Does in no way manipulate EOLs
-
-
-# Match all files for EOL normalization, that are not ignored
-###############################################################################
 *               text=auto
 .gitattributes  text
 .gitignore      text
-
+LICENSE         text
 *.sh            text
 *.md            text
