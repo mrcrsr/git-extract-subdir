@@ -1,5 +1,7 @@
 #!/bin/sh
 
+#TODO: Start with one parameter only from repositories root dir
+
 repo="$1"
 subdir="$2"
 new_repo="$3"
@@ -33,7 +35,7 @@ if [ -z ${repo_fullpath} ]; then
 fi
 
 subdir_given="${subdir:?}"
-subdir="$(echo "{$subdir_given}" | sed -e 's/^\.\///' -e 's/\/$//')"
+subdir="$(echo "${subdir_given:?}" | sed -e 's/^\.\///' -e 's/\/$//')"
 if [ -d "${repo_fullpath:?}/${subdir:?}" ]; then
     echo "Found subdirectory: ${repo:?} -> ${subdir:?}"
 else
