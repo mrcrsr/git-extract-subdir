@@ -41,30 +41,30 @@ else
 fi
 
 
-if [ -d "${new_repo_fullpath:?}" ]; then
+if [ -d "${new_repo:?}" ]; then
     # directory already exists
     if [ "$(ls -A | wc -w)" -eq "0" ]; then
         # directory is empty and a new repo can be created there
-        echo "The directory "${new_repo_fullpath:?}" already exists and can be used"
+        echo "The directory "${new_repo:?}" already exists and can be used"
     else
         # directory is not empty
-        echo "The directory ${new_repo_fullpath:?} already exists and can not be used:"
+        echo "The directory ${new_repo:?} already exists and can not be used:"
         echo "Empty that directory or use another one"
         exit 4
     fi
 else
     # directory does not yet exist
-    echo "The directory ${new_repo_fullpath:?} does not yet exist and will be created..."
-    mkdir ${new_repo_fullpath:?}
+    echo "The directory ${new_repo:?} does not yet exist and will be created..."
+    mkdir ${new_repo:?}
     if [ "$?" -eq "0" ]; then
-        echo "Created directory ${new_repo_fullpath:?}"
+        echo "Created directory ${new_repo:?}"
     else
-        echo "Directory ${new_repo_fullpath:?} could not created:"
+        echo "Directory ${new_repo:?} could not created:"
         exit 5
     fi
 fi
 
-new_repo_fullpath="$(cd "${new_repo_fullpath:?}" && pwd)"
+new_repo_fullpath="$(cd "${new_repo:?}" && pwd)"
 if [ -z ${new_repo_fullpath:?} ]; then
     echo "Error: Could not create full path to new repository ${new_repo_fullpath:?}"
     exit 100
