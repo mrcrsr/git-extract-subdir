@@ -84,7 +84,7 @@ echo "Relative path to new repo:              $new_repo"
 echo "Absolute path to new repo:              $new_repo_fullpath"
 echo "Starting directory:                     $callerdir"
 
-cd "${repo:?}"
+cd "${repo_fullpath:?}"
 
 echo "Splitting ${subdir:?} in it's own branch..."
 git subtree split -P ${subdir:?} -b ${new_branch:?}
@@ -95,7 +95,7 @@ if [ $? -eq "0" ]; then
     echo "Content: ${subdir:?}"
 else
     echo "Something went wrong at the creation of a new branch for the subdir"
-    echo "Inspect ${repo:?} to find more information"
+    echo "Inspect ${repo_fullpath:?} to find more information"
     exit 6
 fi
 
@@ -107,19 +107,19 @@ else
     exit 7
 fi
 
-cd "${new_repo:?}"
+cd "${new_repo_fullpath:?}"
 if [ "$?" -eq "0" ]; then
-    echo "Changed to new repository ${new_repo:?}"
+    echo "Changed to new repository ${new_repo_fullpath:?}"
 else
-    echo "Could not change to directory: ${new_repo:?}"
+    echo "Could not change to directory: ${new_repo_fullpath:?}"
     exit 8
 fi
 
 git init
 if [ "$?" -eq "0" ]; then
-    echo "Initialized new respository ${new_repo:?}"
+    echo "Initialized new respository ${new_repo_fullpath:?}"
 else
-    echo "Could not initialize new respository ${new_repo:?}"
+    echo "Could not initialize new respository ${new_repo_fullpath:?}"
     exit 9
 fi
 
@@ -127,12 +127,12 @@ git pull "${repo_fullpath:?}" "${new_branch:?}"
 if [ "$?" -eq "0" ]; then
     echo "Successfully exported..."
     echo "the directory       ${subdir:?}..."
-    echo "from repository     ${repo:?}..."
-    echo "into new repository ${new_repo:?}"
+    echo "from repository     ${repo_fullpath:?}..."
+    echo "into new repository ${new_repo_fullpath:?}"
     exit 0
 else
     echo "Could not pull branch from repository"
-    echo "Repository: ${repo:?}"
+    echo "Repository: ${repo_fullpath:?}"
     echo "Branch:     ${new_branch:?}"
     exit 10
 fi
