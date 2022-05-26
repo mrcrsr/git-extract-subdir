@@ -8,7 +8,7 @@ new_repo="$3"
 CALLLED_FROM_GIT_ROOTDIR_WITH_ONE_PARAM="false"
 
 
-if [ "#?" -eq "1" ]; then
+if [ "$#" -eq "1" ]; then
     repo="."
     subdir="$1"
     new_repo=""
@@ -26,9 +26,10 @@ if [ "$#" -eq "0" ]; then
     exit 0
 fi
 
-if [ "$#" -lt "3" ]; then
-    echo "Not enough input parameters"
-    echo "git_export_subdir <path-to-repo> <RELATIVE-path-to-subdir> <path-to-new-repo>"
+if [ "$#" -ne "3" ] && [ "$#" -ne "1" ]; then
+    echo "Wrong number of input parameters"
+    echo "    git_export_subdir <path-to-repo> <RELATIVE-path-to-subdir> <path-to-new-repo>"
+    echo "    git_export_subdir <RELATIVE-path-to-subdir>"
     exit 1
 fi
 
