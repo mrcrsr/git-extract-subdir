@@ -57,6 +57,10 @@ fi
 
 new_branch="${subdir:?}-$(date +%Y%m%d-%H%M%S)"
 
+if [ "$CALLLED_FROM_GIT_ROOTDIR_WITH_ONE_PARAM" = "true" ]; then
+    new_repo="../${new_branch:?}.git"
+fi
+
 if [ -d "${new_repo:?}" ]; then
     # directory already exists
     if [ "$(ls -A | wc -w)" -eq "0" ]; then
