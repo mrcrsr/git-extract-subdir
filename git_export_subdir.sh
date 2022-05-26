@@ -8,10 +8,10 @@ new_repo="$3"
 CALLLED_FROM_GIT_ROOTDIR_WITH_ONE_PARAM="false"
 
 
-if [ "$?" -eq "1" ]; then
+if [ "#?" -eq "1" ]; then
     repo="."
     subdir="$1"
-    new_repo="" # echo subdir...
+    new_repo=""
     CALLLED_FROM_GIT_ROOTDIR_WITH_ONE_PARAM="true"
 fi
 
