@@ -5,11 +5,14 @@
 repo="$1"
 subdir="$2"
 new_repo="$3"
+CALLLED_FROM_GIT_ROOTDIR_WITH_ONE_PARAM="false"
+
 
 if [ "$?" -eq "1" ]; then
+    repo="."
     subdir="$1"
-    repo=""
     new_repo="" # echo subdir...
+    CALLLED_FROM_GIT_ROOTDIR_WITH_ONE_PARAM="true"
 fi
 
 if [ "$#" -eq "0" ]; then
