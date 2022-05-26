@@ -5,7 +5,6 @@
 repo="$1"
 subdir="$2"
 new_repo="$3"
-callerdir="$(pwd)"
 
 if [ "$#" -eq "0" ]; then
     echo "git_export_subdir <path-to-repo> <RELATIVE-path-to-subdir> <path-to-new-repo>"
@@ -85,7 +84,6 @@ echo "Repo's subdir relative to repo (used):  $subdir"
 echo "New branch name in repo:                $new_branch"
 echo "Relative path to new repo:              $new_repo"
 echo "Absolute path to new repo:              $new_repo_fullpath"
-echo "Starting directory:                     $callerdir"
 
 #read  -n 1 -p "Press any key to continue..." mainmenuinput
 
@@ -102,14 +100,6 @@ else
     echo "Something went wrong at the creation of a new branch for the subdir"
     echo "Inspect ${repo_fullpath:?} to find more information"
     exit 6
-fi
-
-cd "${callerdir:?}"
-if [ "$?" -eq "0" ]; then
-    echo "Changed to directory ${callerdir:?}"
-else
-    echo "Could not change to directory ${callerdir:?}"
-    exit 7
 fi
 
 cd "${new_repo_fullpath:?}"
