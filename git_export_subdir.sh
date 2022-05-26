@@ -7,6 +7,8 @@ subdir="$2"
 new_repo="$3"
 CALLLED_FROM_GIT_ROOTDIR_WITH_ONE_PARAM="false"
 
+scriptname="git_extractsubdir"
+
 
 if [ "$#" -eq "1" ]; then
     repo="."
@@ -16,11 +18,11 @@ if [ "$#" -eq "1" ]; then
 fi
 
 if [ "$#" -eq "0" ]; then
-    echo "git_export_subdir <path-to-repo> <RELATIVE-path-to-subdir> <path-to-new-repo>"
+    echo "$scriptname <path-to-repo> <RELATIVE-path-to-subdir> <path-to-new-repo>"
     echo "    the path to the subdir must be give relative to the original repository"
     echo "    the path to the subdir must NOT contain leading or trailing / or ."
     echo " "
-    echo "git_export_subdir <RELATIVE-path-to-subdir>"
+    echo "$scriptname <RELATIVE-path-to-subdir>"
     echo "    call from a git's root directory"
     echo "    the new repo will be created in the parent directory"
     exit 0
@@ -28,8 +30,8 @@ fi
 
 if [ "$#" -ne "3" ] && [ "$#" -ne "1" ]; then
     echo "Wrong number of input parameters"
-    echo "    git_export_subdir <path-to-repo> <RELATIVE-path-to-subdir> <path-to-new-repo>"
-    echo "    git_export_subdir <RELATIVE-path-to-subdir>"
+    echo "    $scriptname <path-to-repo> <RELATIVE-path-to-subdir> <path-to-new-repo>"
+    echo "    $scriptname <RELATIVE-path-to-subdir>"
     exit 1
 fi
 
