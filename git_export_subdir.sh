@@ -1,5 +1,10 @@
 #!/bin/sh
 
+repo="$1"
+subdir="$2"
+new_repo="$3"
+callerdir="$(pwd)"
+
 echo "Number of given input parameters:       $#"
 echo "Path to repo                            $1"
 echo "Repo's subdir relative to repo:         $2"
@@ -20,8 +25,6 @@ if [ "$#" -lt "3" ]; then
 fi
 
 
-
-
 if [ -d "${repo:?}" ]; then
     echo "Found repository: ${repo:?}"
 else
@@ -37,10 +40,6 @@ else
     exit 3
 fi
 
-repo="$1"
-subdir="$2"
-new_repo="$3"
-callerdir="$(pwd)"
 
 if [ -d "${new_repo:?}" ]; then
     # directory already exists
