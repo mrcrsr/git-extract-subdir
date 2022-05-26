@@ -1,3 +1,5 @@
 *
 !.gitignore
+!.gitattributes
+!README.md
 !git_export_subdir.sh
