@@ -27,13 +27,13 @@ else
 fi
 
 repo_fullpath="$(cd "${repo:?}" && pwd)"
-if [ "${repo_fullpath}" -eq "" ]; then
+if [ -z ${repo_fullpath} ]; then
     echo "Error: Could not create full path to repository ${repo:?}"
     exit 100
 fi
 
 
-if [ -d "${subdir:?}" ]; then
+if [ -d "${repo_fullpath:?}/${subdir:?}" ]; then
     echo "Found subdirectory: ${repo:?} -> ${subdir:?}"
 else
     echo "Error: Subdirectory ${subdir:?} does not exist"
@@ -65,7 +65,7 @@ else
 fi
 
 new_repo_fullpath="$(cd "${new_repo_fullpath:?}" && pwd)"
-if [ "${new_repo_fullpath}" -eq "" ]; then
+if [ -z ${new_repo_fullpath} ]; then
     echo "Error: Could not create full path to new repository ${new_repo_fullpath:?}"
     exit 100
 fi
