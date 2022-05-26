@@ -32,7 +32,8 @@ if [ -z ${repo_fullpath} ]; then
     exit 100
 fi
 
-
+subdir_given="${subdir:?}"
+subdir="$(echo "{$subdir_given}" | sed -e 's/^\.\///' -e 's/\/$//')"
 if [ -d "${repo_fullpath:?}/${subdir:?}" ]; then
     echo "Found subdirectory: ${repo:?} -> ${subdir:?}"
 else
@@ -70,7 +71,6 @@ if [ -z ${new_repo_fullpath:?} ]; then
     exit 100
 fi
 
-#read  -n 1 -p "Press any key to continue..." mainmenuinput
 
 new_branch="${subdir:?}-$(date +%Y%m%d-%H%M%S)"
 
@@ -78,11 +78,14 @@ new_branch="${subdir:?}-$(date +%Y%m%d-%H%M%S)"
 echo "Number of given input parameters:       $#"
 echo "Relative path to repo:                  $repo"
 echo "Absolute path to repo:                  $repo_fullpath"
-echo "Repo's subdir relative to repo:         $subdir"
+echo "Repo's subdir relative to repo (given): $subdir_given"
+echo "Repo's subdir relative to repo (used):  $subdir"
 echo "New branch name in repo:                $new_branch"
 echo "Relative path to new repo:              $new_repo"
 echo "Absolute path to new repo:              $new_repo_fullpath"
 echo "Starting directory:                     $callerdir"
+
+#read  -n 1 -p "Press any key to continue..." mainmenuinput
 
 cd "${repo_fullpath:?}"
 
