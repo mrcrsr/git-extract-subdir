@@ -1,6 +1,6 @@
-*               text=auto
-.gitattributes  text
-.gitignore      text
+*               -text
+.gitattributes  text eol=lf
+.gitignore      text eol=lf
 LICENSE         text
-*.sh            text
 *.md            text
+*.sh            text eol=lf
