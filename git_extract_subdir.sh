@@ -77,7 +77,7 @@ if [ -d "${new_repo:?}" ]; then
 else
     # directory does not yet exist
     echo "The directory ${new_repo:?} does not yet exist and will be created..."
-    mkdir ${new_repo:?}
+    mkdir -p ${new_repo:?}
     if [ "$?" -eq "0" ]; then
         echo "Created directory ${new_repo:?}"
     else
