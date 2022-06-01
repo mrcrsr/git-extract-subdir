@@ -38,13 +38,13 @@ fi
 if [ -d "${repo:?}" ]; then
     echo "Found repository: ${repo:?}"
 else
-    echo "Error: Repository ${repo:?} does not exist"
+    echo "${scriptname}: Error: Repository ${repo:?} does not exist"
     exit 2
 fi
 
 repo_fullpath="$(cd "${repo:?}" && pwd)"
 if [ -z ${repo_fullpath} ]; then
-    echo "Error: Could not create full path to repository ${repo:?}"
+    echo "${scriptname}: Error: Could not create full path to repository ${repo:?}"
     exit 3
 fi
 
@@ -53,7 +53,7 @@ subdir="$(echo "${subdir_given:?}" | sed -e 's/^\.\///' -e 's/\/$//')"
 if [ -d "${repo_fullpath:?}/${subdir:?}" ]; then
     echo "Found subdirectory: ${repo:?} -> ${subdir:?}"
 else
-    echo "Error: Subdirectory ${subdir:?} does not exist"
+    echo "${scriptname}: Error: Subdirectory ${subdir:?} does not exist"
     exit 4
 fi
 
@@ -88,7 +88,7 @@ fi
 
 new_repo_fullpath="$(cd "${new_repo:?}" && pwd)"
 if [ -z ${new_repo_fullpath:?} ]; then
-    echo "Error: Could not create full path to new repository ${new_repo_fullpath:?}"
+    echo "${scriptname}: Error: Could not create full path to new repository ${new_repo_fullpath:?}"
     exit 7
 fi
 
