@@ -45,17 +45,14 @@ shift
 shift
 
 # Construct strings for subdirs to keep
-for sd in "$@"; do
-    sdtokeep="$sdtokeep"" --path $sd"
+for subdir in "$@"; do
+    if [ ! -d "${repo:?}/${subdir:?}" ]; then
+        echo "${scriptname}: Error: Subdirectory ${subdir:?} does not exist in ${repo:?}"
+        echo "  Leaving..."
+        exit 4
+    fi
+    sdtokeep="$sdtokeep"" --path $subdir"
 done
-
-subdir_given="${subdir:?}"
-subdir="$(echo "${subdir_given:?}" | sed -e 's/^\.\///' -e 's/\/$//')"
-if [ ! -d "${repo:?}/${subdir:?}" ]; then
-    echo "${scriptname}: Error: Subdirectory ${subdir:?} does not exist"
-    echo "  Leaving..."
-    exit 4
-fi
 
 if [ -d "${new_repo:?}" ]; then
     # directory already exists
