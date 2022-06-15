@@ -21,7 +21,7 @@ nargs="$#"
 
 scriptname="git_extractsubdir"
 
-CLONE="1"
+CLONE=""
 
 
 if [ "$#" -eq "0" ]; then
@@ -101,11 +101,19 @@ echo "Relative path to repo:                  $repo"
 echo "Relative path to new repo:              $new_repo"
 echo "Parameter string for filter-repo:       $filterrepo_keptdirs"
 
-exit 0
 
 # Call git filter-repo
-git filter-repo "${filterrepo_keptdirs}"
-
+echo "$scriptname: Calling 'git filter-repo'"
+git filter-repo ${filterrepo_keptdirs}
+echo "$scriptname: Calling 'git reset --hard'"
+git reset --hard
+echo "$scriptname: Calling 'git gc --aggressive'"
+git gc --aggressive
+echo "$scriptname: Calling 'git prune'"
+git prune
+echo "$scriptname: Calling 'git clean -df'"
+git clean -df
+echo "$scriptname: Finished"
 
 #read  -n 1 -p "Press any key to continue..." mainmenuinput
 
