@@ -1,5 +1,18 @@
 #!/bin/sh
 
+# https://stackoverflow.com/questions/65263626/push-commits-affecting-a-given-path-to-a-new-origin/65265319#65265319
+# https://gist.github.com/trongthanh/2779392
+# https://mattsch.com/2015/06/19/move-directory-from-one-repository-to-another-preserving-history/
+# With filter-repo
+# git filter-branch --subdirectory-filter <directory-to-keep> -- --all # --prune-empy
+# move to subdirectory: check how to do
+# git reset --hard
+# git gc --aggressive
+# git prune
+# git clean -df
+#  - go to new repo
+# git remote add <branch> /path/to/repo
+# git pull --allow-unrelated-histories <branch> main
 #TODO: Start with one parameter only from repositories root dir
 
 repo="$1"
