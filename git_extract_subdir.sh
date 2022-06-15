@@ -126,18 +126,5 @@ else
     exit 9
 fi
 
-git pull "${repo_fullpath:?}" "${new_branch:?}"
-if [ "$?" -eq "0" ]; then
-    echo "Successfully exported..."
-    echo "the directory       ${subdir:?}..."
-    echo "from repository     ${repo_fullpath:?}..."
-    echo "into new repository ${new_repo_fullpath:?}"
-    exit 0
-else
-    echo "Could not pull branch from repository"
-    echo "Repository: ${repo_fullpath:?}"
-    echo "Branch:     ${new_branch:?}"
-    exit 11
-fi
 
 exit 0
