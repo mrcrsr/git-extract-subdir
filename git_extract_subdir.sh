@@ -17,6 +17,7 @@
 
 repo="$1"
 new_repo="$2"
+nargs="$#"
 
 scriptname="git_extractsubdir"
 
@@ -38,6 +39,15 @@ if [ ! -d "${repo:?}" ]; then
     echo "  Leaving..."
     exit 2
 fi
+
+# Throw away first and second paramters: source repo and target repo
+shift
+shift
+
+# Construct strings for subdirs to keep
+for sd in "$@"; do
+    sdtokeep="$sdtokeep"" --path $sd"
+done
 
 subdir_given="${subdir:?}"
 subdir="$(echo "${subdir_given:?}" | sed -e 's/^\.\///' -e 's/\/$//')"
@@ -75,17 +85,8 @@ if [ "$?" -ne "0" ]; then
     exit 9
 fi
 
-# Throw away first and second paramters: source repo and target repo
-shift
-shift
-
-# Construct strings for subdirs to keep
-for sd in "$@"; do
-    sdtokeep="$sdtokeep"" --path $sd"
-done
-
 # Give some output
-echo "Number of given input parameters:       $#"
+echo "Number of given input parameters:       $nargs"
 echo "Relative path to repo:                  $repo"
 echo "Repo's subdir relative to repo (given): $subdir_given"
 echo "Repo's subdir relative to repo (used):  $subdir"
