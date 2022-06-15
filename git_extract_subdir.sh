@@ -21,6 +21,9 @@ nargs="$#"
 
 scriptname="git_extractsubdir"
 
+CLONE="1"
+
+
 if [ "$#" -eq "0" ]; then
     echo "$scriptname <path-to-repo> <path-to-new-repo> <subdir-1> <subdir-2> ... <subdir-n>"
     echo "    the path to the subdirs must be given relative to the original repository"
@@ -55,24 +58,33 @@ for subdir in "$@"; do
     filterrepo_keptdirs="$filterrepo_keptdirs --path $subdir"
 done
 
-if [ -d "${new_repo:?}" ]; then
-    # directory already exists
-    if [ "$(ls -A | wc -w)" -ne "0" ]; then
-        # directory is not empty
-        echo "${scriptname}: Error: The directory already exists and can not be used:"
-        echo "  ${new_repo:?}"
-        echo "  Empty that directory or use another one"
-        echo "  Leaving..."
-        exit 5
+if [ -n "$CLONE" ]; then
+    if [ -d "${new_repo:?}" ]; then
+        # directory already exists
+        if [ "$(ls -A | wc -w)" -ne "0" ]; then
+            # directory is not empty
+            echo "${scriptname}: Error: The directory already exists and can not be used:"
+            echo "  ${new_repo:?}"
+            echo "  Empty that directory or use another one"
+            echo "  Leaving..."
+            exit 5
+        fi
     fi
-fi
 
-git clone --no-local "${repo:?}" "${new_repo:?}"
-if [ "$?" -ne "0" ]; then
-    echo "${scriptname}: Error: Could not clone repository:"
-    echo "  ${repo:?}  -->  ${new_repo:?}"
-    echo "  Leaving..."
-    exit 9
+    git clone --no-local "${repo:?}" "${new_repo:?}"
+    if [ "$?" -ne "0" ]; then
+        echo "${scriptname}: Error: Could not clone repository:"
+        echo "  ${repo:?}  -->  ${new_repo:?}"
+        echo "  Leaving..."
+        exit 9
+    fi
+else
+    if [ ! -d "${new_repo:?}/.git" ]; then
+        echo "${scriptname}: Error: Can't skip clone, target directory is not a git repository:"
+        echo "  ${new_repo:?}"
+        echo "  Leaving..."
+        exit 9
+    fi
 fi
 
 cd "${new_repo:?}"
