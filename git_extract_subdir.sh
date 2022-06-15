@@ -87,15 +87,19 @@ for sd in "$@"; do
     sdtokeep="$sdtokeep"" --path $sd"
 done
 
-# Call git filter-repo
-git filter-repo "${sdtokeep}"
-
 # Give some output
 echo "Number of given input parameters:       $#"
 echo "Relative path to repo:                  $repo"
 echo "Repo's subdir relative to repo (given): $subdir_given"
 echo "Repo's subdir relative to repo (used):  $subdir"
 echo "Relative path to new repo:              $new_repo"
+echo "Parameter string for filter-repo:       $sdtokeep"
+
+exit 0
+
+# Call git filter-repo
+git filter-repo "${sdtokeep}"
+
 
 #read  -n 1 -p "Press any key to continue..." mainmenuinput
 
