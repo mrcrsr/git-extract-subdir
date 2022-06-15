@@ -51,7 +51,7 @@ for subdir in "$@"; do
         echo "  Leaving..."
         exit 4
     fi
-    sdtokeep="$sdtokeep"" --path $subdir"
+    filterrepo_keptdirs="$filterrepo_keptdirs --path $subdir"
 done
 
 if [ -d "${new_repo:?}" ]; then
@@ -88,12 +88,12 @@ echo "Relative path to repo:                  $repo"
 echo "Repo's subdir relative to repo (given): $subdir_given"
 echo "Repo's subdir relative to repo (used):  $subdir"
 echo "Relative path to new repo:              $new_repo"
-echo "Parameter string for filter-repo:       $sdtokeep"
+echo "Parameter string for filter-repo:       $filterrepo_keptdirs"
 
 exit 0
 
 # Call git filter-repo
-git filter-repo "${sdtokeep}"
+git filter-repo "${filterrepo_keptdirs}"
 
 
 #read  -n 1 -p "Press any key to continue..." mainmenuinput
