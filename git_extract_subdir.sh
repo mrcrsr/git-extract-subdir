@@ -77,6 +77,14 @@ if [ "$?" -ne "0" ]; then
     exit 9
 fi
 
+cd "${new_repo:?}"
+if [ "$?" -ne "0" ]; then
+    echo "${scriptname}: Error: Could change to cloned repository:"
+    echo "  ${new_repo:?}"
+    echo "  Leaving..."
+    exit 9
+fi
+
 #new_repo_fullpath="$(cd "${new_repo:?}" && pwd)"
 #if [ -z ${new_repo_fullpath:?} ]; then
 #    echo "${scriptname}: Error: Could not create full path to new repository ${new_repo_fullpath:?}"
