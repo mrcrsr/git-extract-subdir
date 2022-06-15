@@ -118,21 +118,6 @@ echo "Absolute path to new repo:              $new_repo_fullpath"
 
 #read  -n 1 -p "Press any key to continue..." mainmenuinput
 
-cd "${repo_fullpath:?}"
-
-echo "Splitting ${subdir:?} in it's own branch..."
-git subtree split -P ${subdir:?} -b ${new_branch:?}
-
-if [ $? -eq "0" ]; then
-    echo "Created new branch:"
-    echo "Name:    ${new_branch:?}"
-    echo "Content: ${subdir:?}"
-else
-    echo "Something went wrong at the creation of a new branch for the subdir"
-    echo "Inspect ${repo_fullpath:?} to find more information"
-    exit 8
-fi
-
 cd "${new_repo_fullpath:?}"
 if [ "$?" -eq "0" ]; then
     echo "Changed to new repository ${new_repo_fullpath:?}"
