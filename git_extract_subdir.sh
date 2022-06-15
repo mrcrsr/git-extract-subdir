@@ -126,14 +126,6 @@ else
     exit 9
 fi
 
-git init
-if [ "$?" -eq "0" ]; then
-    echo "Initialized new respository ${new_repo_fullpath:?}"
-else
-    echo "Could not initialize new respository ${new_repo_fullpath:?}"
-    exit 10
-fi
-
 git pull "${repo_fullpath:?}" "${new_branch:?}"
 if [ "$?" -eq "0" ]; then
     echo "Successfully exported..."
