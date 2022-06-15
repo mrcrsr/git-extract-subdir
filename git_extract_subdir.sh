@@ -1,153 +1,105 @@
 #!/bin/sh
 
-#TODO: Start with one parameter only from repositories root dir
-
 repo="$1"
-subdir="$2"
-new_repo="$3"
-CALLLED_FROM_GIT_ROOTDIR_WITH_ONE_PARAM="false"
+new_repo="$2"
+nargs="$#"
 
 scriptname="git_extractsubdir"
 
-
-if [ "$#" -eq "1" ]; then
-    repo="."
-    subdir="$1"
-    new_repo=""
-    CALLLED_FROM_GIT_ROOTDIR_WITH_ONE_PARAM="true"
-fi
+CLONE="1"
 
 if [ "$#" -eq "0" ]; then
-    echo "$scriptname <path-to-repo> <RELATIVE-path-to-subdir> <path-to-new-repo>"
-    echo "    the path to the subdir must be give relative to the original repository"
-    echo "    the path to the subdir must NOT contain leading or trailing / or ."
-    echo " "
-    echo "$scriptname <RELATIVE-path-to-subdir>"
-    echo "    call from a git's root directory"
-    echo "    the new repo will be created in the parent directory"
+    echo "$scriptname <path-to-repo> <path-to-new-repo> <subdir-1> <subdir-2> ... <subdir-n>"
+    echo "    the path to the subdirs must be given relative to the original repository"
     exit 0
 fi
 
-if [ "$#" -ne "3" ] && [ "$#" -ne "1" ]; then
+if [ "$#" -lt "3" ]; then
     echo "Wrong number of input parameters"
-    echo "    $scriptname <path-to-repo> <RELATIVE-path-to-subdir> <path-to-new-repo>"
-    echo "    $scriptname <RELATIVE-path-to-subdir>"
+    echo "    $scriptname <path-to-repo> <path-to-new-repo> <subdir-1> <subdir-2> ... <subdir-n>"
+    echo "  Leaving..."
     exit 1
 fi
 
-if [ -d "${repo:?}" ]; then
-    echo "Found repository: ${repo:?}"
-else
+if [ ! -d "${repo:?}" ]; then
     echo "${scriptname}: Error: Repository ${repo:?} does not exist"
+    echo "  Leaving..."
     exit 2
 fi
 
-repo_fullpath="$(cd "${repo:?}" && pwd)"
-if [ -z ${repo_fullpath} ]; then
-    echo "${scriptname}: Error: Could not create full path to repository ${repo:?}"
-    exit 3
-fi
+# Throw away first and second paramters: source repo and target repo
+shift
+shift
 
-subdir_given="${subdir:?}"
-subdir="$(echo "${subdir_given:?}" | sed -e 's/^\.\///' -e 's/\/$//')"
-if [ -d "${repo_fullpath:?}/${subdir:?}" ]; then
-    echo "Found subdirectory: ${repo:?} -> ${subdir:?}"
-else
-    echo "${scriptname}: Error: Subdirectory ${subdir:?} does not exist"
-    exit 4
-fi
+# Construct strings for subdirs to keep
+for subdir in "$@"; do
+    if [ ! -d "${repo:?}/${subdir:?}" ]; then
+        echo "${scriptname}: Error: Subdirectory does not exist:"
+        echo "  '${subdir:?}' in '${repo:?}'"
+        echo "  Leaving..."
+        exit 4
+    fi
+    filterrepo_keptdirs="$filterrepo_keptdirs --path $subdir"
+done
 
-new_branch="${subdir:?}-$(date +%Y%m%d-%H%M%S)"
+if [ -n "$CLONE" ]; then
+    if [ -d "${new_repo:?}" ]; then
+        # directory already exists
+        if [ "$(ls -A | wc -w)" -ne "0" ]; then
+            # directory is not empty
+            echo "${scriptname}: Error: The directory already exists and can not be used:"
+            echo "  ${new_repo:?}"
+            echo "  Empty that directory or use another one"
+            echo "  Leaving..."
+            exit 5
+        fi
+    fi
 
-if [ "$CALLLED_FROM_GIT_ROOTDIR_WITH_ONE_PARAM" = "true" ]; then
-    new_repo="../${new_branch:?}.git"
-fi
-
-if [ -d "${new_repo:?}" ]; then
-    # directory already exists
-    if [ "$(ls -A | wc -w)" -eq "0" ]; then
-        # directory is empty and a new repo can be created there
-        echo "The directory "${new_repo:?}" already exists and can be used"
-    else
-        # directory is not empty
-        echo "The directory ${new_repo:?} already exists and can not be used:"
-        echo "Empty that directory or use another one"
-        exit 5
+    git clone --no-local "${repo:?}" "${new_repo:?}"
+    if [ "$?" -ne "0" ]; then
+        echo "${scriptname}: Error: Could not clone repository:"
+        echo "  ${repo:?}  -->  ${new_repo:?}"
+        echo "  Leaving..."
+        exit 9
     fi
 else
-    # directory does not yet exist
-    echo "The directory ${new_repo:?} does not yet exist and will be created..."
-    mkdir -p ${new_repo:?}
-    if [ "$?" -eq "0" ]; then
-        echo "Created directory ${new_repo:?}"
-    else
-        echo "Directory ${new_repo:?} could not created:"
-        exit 6
+    if [ ! -d "${new_repo:?}/.git" ]; then
+        echo "${scriptname}: Error: Can't skip clone, target directory is not a git repository:"
+        echo "  ${new_repo:?}"
+        echo "  Leaving..."
+        exit 9
     fi
 fi
 
-new_repo_fullpath="$(cd "${new_repo:?}" && pwd)"
-if [ -z ${new_repo_fullpath:?} ]; then
-    echo "${scriptname}: Error: Could not create full path to new repository ${new_repo_fullpath:?}"
-    exit 7
-fi
-
-
-# Give some output
-echo "Number of given input parameters:       $#"
-echo "Relative path to repo:                  $repo"
-echo "Absolute path to repo:                  $repo_fullpath"
-echo "Repo's subdir relative to repo (given): $subdir_given"
-echo "Repo's subdir relative to repo (used):  $subdir"
-echo "New branch name in repo:                $new_branch"
-echo "Relative path to new repo:              $new_repo"
-echo "Absolute path to new repo:              $new_repo_fullpath"
-
-#read  -n 1 -p "Press any key to continue..." mainmenuinput
-
-cd "${repo_fullpath:?}"
-
-echo "Splitting ${subdir:?} in it's own branch..."
-git subtree split -P ${subdir:?} -b ${new_branch:?}
-
-if [ $? -eq "0" ]; then
-    echo "Created new branch:"
-    echo "Name:    ${new_branch:?}"
-    echo "Content: ${subdir:?}"
-else
-    echo "Something went wrong at the creation of a new branch for the subdir"
-    echo "Inspect ${repo_fullpath:?} to find more information"
-    exit 8
-fi
-
-cd "${new_repo_fullpath:?}"
-if [ "$?" -eq "0" ]; then
-    echo "Changed to new repository ${new_repo_fullpath:?}"
-else
-    echo "Could not change to directory: ${new_repo_fullpath:?}"
+cd "${new_repo:?}"
+if [ "$?" -ne "0" ]; then
+    echo "${scriptname}: Error: Could change to cloned repository:"
+    echo "  ${new_repo:?}"
+    echo "  Leaving..."
     exit 9
 fi
 
-git init
-if [ "$?" -eq "0" ]; then
-    echo "Initialized new respository ${new_repo_fullpath:?}"
-else
-    echo "Could not initialize new respository ${new_repo_fullpath:?}"
-    exit 10
-fi
+# Give some output
+echo "Number of given input parameters:       $nargs"
+echo "Relative path to repo:                  $repo"
+echo "Relative path to new repo:              $new_repo"
+echo "Parameter string for filter-repo:       $filterrepo_keptdirs"
 
-git pull "${repo_fullpath:?}" "${new_branch:?}"
-if [ "$?" -eq "0" ]; then
-    echo "Successfully exported..."
-    echo "the directory       ${subdir:?}..."
-    echo "from repository     ${repo_fullpath:?}..."
-    echo "into new repository ${new_repo_fullpath:?}"
-    exit 0
-else
-    echo "Could not pull branch from repository"
-    echo "Repository: ${repo_fullpath:?}"
-    echo "Branch:     ${new_branch:?}"
-    exit 11
-fi
+
+# Call git filter-repo
+echo "$scriptname: Calling 'git filter-repo'"
+git filter-repo ${filterrepo_keptdirs}
+echo "$scriptname: Calling 'git reset --hard'"
+git reset --hard
+echo "$scriptname: Calling 'git gc --aggressive'"
+git gc --aggressive
+echo "$scriptname: Calling 'git prune'"
+git prune
+echo "$scriptname: Calling 'git clean -df'"
+git clean -df
+echo "$scriptname: Finished"
+
+#read  -n 1 -p "Press any key to continue..." mainmenuinput
+
 
 exit 0
