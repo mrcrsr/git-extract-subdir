@@ -25,10 +25,6 @@ if [ "$#" -eq "0" ]; then
     echo "$scriptname <path-to-repo> <RELATIVE-path-to-subdir> <path-to-new-repo>"
     echo "    the path to the subdir must be give relative to the original repository"
     echo "    the path to the subdir must NOT contain leading or trailing / or ."
-    echo " "
-    echo "$scriptname <RELATIVE-path-to-subdir>"
-    echo "    call from a git's root directory"
-    echo "    the new repo will be created in the parent directory"
     exit 0
 fi
 
@@ -39,9 +35,7 @@ if [ "$#" -ne "3" ] && [ "$#" -ne "1" ]; then
     exit 1
 fi
 
-if [ -d "${repo:?}" ]; then
-    echo "Found repository: ${repo:?}"
-else
+if [ ! -d "${repo:?}" ]; then
     echo "${scriptname}: Error: Repository ${repo:?} does not exist"
     exit 2
 fi
@@ -54,9 +48,7 @@ fi
 
 subdir_given="${subdir:?}"
 subdir="$(echo "${subdir_given:?}" | sed -e 's/^\.\///' -e 's/\/$//')"
-if [ -d "${repo_fullpath:?}/${subdir:?}" ]; then
-    echo "Found subdirectory: ${repo:?} -> ${subdir:?}"
-else
+if [ ! -d "${repo_fullpath:?}/${subdir:?}" ]; then
     echo "${scriptname}: Error: Subdirectory ${subdir:?} does not exist"
     exit 4
 fi
@@ -103,9 +95,7 @@ echo "Absolute path to new repo:              $new_repo_fullpath"
 #read  -n 1 -p "Press any key to continue..." mainmenuinput
 
 cd "${new_repo_fullpath:?}"
-if [ "$?" -eq "0" ]; then
-    echo "Changed to new repository ${new_repo_fullpath:?}"
-else
+if [ "$?" -ne "0" ]; then
     echo "Could not change to directory: ${new_repo_fullpath:?}"
     exit 9
 fi
