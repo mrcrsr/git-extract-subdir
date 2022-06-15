@@ -47,7 +47,8 @@ shift
 # Construct strings for subdirs to keep
 for subdir in "$@"; do
     if [ ! -d "${repo:?}/${subdir:?}" ]; then
-        echo "${scriptname}: Error: Subdirectory ${subdir:?} does not exist in ${repo:?}"
+        echo "${scriptname}: Error: Subdirectory does not exist:"
+        echo "  '${subdir:?}' in '${repo:?}'"
         echo "  Leaving..."
         exit 4
     fi
@@ -85,8 +86,6 @@ fi
 # Give some output
 echo "Number of given input parameters:       $nargs"
 echo "Relative path to repo:                  $repo"
-echo "Repo's subdir relative to repo (given): $subdir_given"
-echo "Repo's subdir relative to repo (used):  $subdir"
 echo "Relative path to new repo:              $new_repo"
 echo "Parameter string for filter-repo:       $filterrepo_keptdirs"
 
