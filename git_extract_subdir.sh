@@ -42,15 +42,8 @@ if [ ! -d "${repo:?}" ]; then
     exit 2
 fi
 
-#repo_fullpath="$(cd "${repo:?}" && pwd)"
-#if [ -z ${repo_fullpath} ]; then
-#    echo "${scriptname}: Error: Could not create full path to repository ${repo:?}"
-#    exit 3
-#fi
-
 subdir_given="${subdir:?}"
 subdir="$(echo "${subdir_given:?}" | sed -e 's/^\.\///' -e 's/\/$//')"
-#if [ ! -d "${repo_fullpath:?}/${subdir:?}" ]; then
 if [ ! -d "${repo:?}/${subdir:?}" ]; then
     echo "${scriptname}: Error: Subdirectory ${subdir:?} does not exist"
     echo "  Leaving..."
@@ -97,29 +90,14 @@ done
 # Call git filter-repo
 git filter-repo "${sdtokeep}"
 
-#new_repo_fullpath="$(cd "${new_repo:?}" && pwd)"
-#if [ -z ${new_repo_fullpath:?} ]; then
-#    echo "${scriptname}: Error: Could not create full path to new repository ${new_repo_fullpath:?}"
-#    exit 7
-#fi
-
-
 # Give some output
 echo "Number of given input parameters:       $#"
 echo "Relative path to repo:                  $repo"
-#echo "Absolute path to repo:                  $repo_fullpath"
 echo "Repo's subdir relative to repo (given): $subdir_given"
 echo "Repo's subdir relative to repo (used):  $subdir"
 echo "Relative path to new repo:              $new_repo"
-#echo "Absolute path to new repo:              $new_repo_fullpath"
 
 #read  -n 1 -p "Press any key to continue..." mainmenuinput
-
-#cd "${new_repo_fullpath:?}"
-#if [ "$?" -ne "0" ]; then
-#    echo "Could not change to directory: ${new_repo_fullpath:?}"
-#    exit 9
-#fi
 
 
 exit 0
