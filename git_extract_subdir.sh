@@ -32,11 +32,13 @@ if [ "$#" -ne "3" ] && [ "$#" -ne "1" ]; then
     echo "Wrong number of input parameters"
     echo "    $scriptname <path-to-repo> <RELATIVE-path-to-subdir> <path-to-new-repo>"
     echo "    $scriptname <RELATIVE-path-to-subdir>"
+    echo "  Leaving..."
     exit 1
 fi
 
 if [ ! -d "${repo:?}" ]; then
     echo "${scriptname}: Error: Repository ${repo:?} does not exist"
+    echo "  Leaving..."
     exit 2
 fi
 
@@ -51,6 +53,7 @@ subdir="$(echo "${subdir_given:?}" | sed -e 's/^\.\///' -e 's/\/$//')"
 #if [ ! -d "${repo_fullpath:?}/${subdir:?}" ]; then
 if [ ! -d "${repo:?}/${subdir:?}" ]; then
     echo "${scriptname}: Error: Subdirectory ${subdir:?} does not exist"
+    echo "  Leaving..."
     exit 4
 fi
 
@@ -61,12 +64,18 @@ if [ -d "${new_repo:?}" ]; then
         echo "${scriptname}: Error: The directory already exists and can not be used:"
         echo "  ${new_repo:?}"
         echo "  Empty that directory or use another one"
+        echo "  Leaving..."
         exit 5
     fi
 fi
 
 git clone --no-local "${repo:?}" "${new_repo:?}"
-
+if [ "$?" -ne "0" ]; then
+    echo "${scriptname}: Error: Could not clone repository:"
+    echo "  ${repo:?}  -->  ${new_repo:?}"
+    echo "  Leaving..."
+    exit 9
+fi
 
 #new_repo_fullpath="$(cd "${new_repo:?}" && pwd)"
 #if [ -z ${new_repo_fullpath:?} ]; then
