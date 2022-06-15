@@ -55,24 +55,11 @@ fi
 
 if [ -d "${new_repo:?}" ]; then
     # directory already exists
-    if [ "$(ls -A | wc -w)" -eq "0" ]; then
-        # directory is empty and a new repo can be created there
-        echo "The directory "${new_repo:?}" already exists and can be used"
-    else
+    if [ "$(ls -A | wc -w)" -ne "0" ]; then
         # directory is not empty
         echo "The directory ${new_repo:?} already exists and can not be used:"
         echo "Empty that directory or use another one"
         exit 5
-    fi
-else
-    # directory does not yet exist
-    echo "The directory ${new_repo:?} does not yet exist and will be created..."
-    mkdir -p ${new_repo:?}
-    if [ "$?" -eq "0" ]; then
-        echo "Created directory ${new_repo:?}"
-    else
-        echo "Directory ${new_repo:?} could not created:"
-        exit 6
     fi
 fi
 
