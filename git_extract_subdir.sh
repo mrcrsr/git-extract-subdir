@@ -85,6 +85,18 @@ if [ "$?" -ne "0" ]; then
     exit 9
 fi
 
+# Throw away first and second paramters: source repo and target repo
+shift
+shift
+
+# Construct strings for subdirs to keep
+for sd in "$@"; do
+    sdtokeep="$sdtokeep"" --path $sd"
+done
+
+# Call git filter-repo
+git filter-repo "${sdtokeep}"
+
 #new_repo_fullpath="$(cd "${new_repo:?}" && pwd)"
 #if [ -z ${new_repo_fullpath:?} ]; then
 #    echo "${scriptname}: Error: Could not create full path to new repository ${new_repo_fullpath:?}"
