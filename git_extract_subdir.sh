@@ -70,10 +70,8 @@ else
     exit 4
 fi
 
-new_branch="${subdir:?}-$(date +%Y%m%d-%H%M%S)"
-
 if [ "$CALLLED_FROM_GIT_ROOTDIR_WITH_ONE_PARAM" = "true" ]; then
-    new_repo="../${new_branch:?}.git"
+    # new_repo="../${new_branch:?}.git"
 fi
 
 if [ -d "${new_repo:?}" ]; then
@@ -112,7 +110,6 @@ echo "Relative path to repo:                  $repo"
 echo "Absolute path to repo:                  $repo_fullpath"
 echo "Repo's subdir relative to repo (given): $subdir_given"
 echo "Repo's subdir relative to repo (used):  $subdir"
-echo "New branch name in repo:                $new_branch"
 echo "Relative path to new repo:              $new_repo"
 echo "Absolute path to new repo:              $new_repo_fullpath"
 
