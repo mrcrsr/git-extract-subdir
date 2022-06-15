@@ -16,22 +16,19 @@
 #TODO: Start with one parameter only from repositories root dir
 
 repo="$1"
-subdir="$2"
-new_repo="$3"
+new_repo="$2"
 
 scriptname="git_extractsubdir"
 
 if [ "$#" -eq "0" ]; then
-    echo "$scriptname <path-to-repo> <RELATIVE-path-to-subdir> <path-to-new-repo>"
-    echo "    the path to the subdir must be give relative to the original repository"
-    echo "    the path to the subdir must NOT contain leading or trailing / or ."
+    echo "$scriptname <path-to-repo> <path-to-new-repo> <subdir-1> <subdir-2> ... <subdir-n>"
+    echo "    the path to the subdirs must be given relative to the original repository"
     exit 0
 fi
 
-if [ "$#" -ne "3" ] && [ "$#" -ne "1" ]; then
+if [ "$#" -lt "3" ]; then
     echo "Wrong number of input parameters"
-    echo "    $scriptname <path-to-repo> <RELATIVE-path-to-subdir> <path-to-new-repo>"
-    echo "    $scriptname <RELATIVE-path-to-subdir>"
+    echo "    $scriptname <path-to-repo> <path-to-new-repo> <subdir-1> <subdir-2> ... <subdir-n>"
     echo "  Leaving..."
     exit 1
 fi
