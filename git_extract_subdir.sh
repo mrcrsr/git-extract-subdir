@@ -18,17 +18,8 @@
 repo="$1"
 subdir="$2"
 new_repo="$3"
-CALLLED_FROM_GIT_ROOTDIR_WITH_ONE_PARAM="false"
 
 scriptname="git_extractsubdir"
-
-
-if [ "$#" -eq "1" ]; then
-    repo="."
-    subdir="$1"
-    new_repo=""
-    CALLLED_FROM_GIT_ROOTDIR_WITH_ONE_PARAM="true"
-fi
 
 if [ "$#" -eq "0" ]; then
     echo "$scriptname <path-to-repo> <RELATIVE-path-to-subdir> <path-to-new-repo>"
@@ -68,10 +59,6 @@ if [ -d "${repo_fullpath:?}/${subdir:?}" ]; then
 else
     echo "${scriptname}: Error: Subdirectory ${subdir:?} does not exist"
     exit 4
-fi
-
-if [ "$CALLLED_FROM_GIT_ROOTDIR_WITH_ONE_PARAM" = "true" ]; then
-    # new_repo="../${new_branch:?}.git"
 fi
 
 if [ -d "${new_repo:?}" ]; then
