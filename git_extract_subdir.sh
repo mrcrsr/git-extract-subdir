@@ -91,8 +91,8 @@ echo "$scriptname: Calling 'git filter-repo'"
 git filter-repo ${filterrepo_keptdirs}
 echo "$scriptname: Calling 'git reset --hard'"
 git reset --hard
-echo "$scriptname: Calling 'git gc --aggressive'"
-git gc --aggressive
+# echo "$scriptname: Calling 'git gc --aggressive'"
+# git gc --aggressive
 echo "$scriptname: Calling 'git prune'"
 git prune
 echo "$scriptname: Calling 'git clean -df'"
